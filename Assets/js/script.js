@@ -14,16 +14,18 @@ let buttonArray = [];
 //console.log(citySearches)
 //console.log(savedCitySearches)
 
+
+//Function to take users text input/search of a city and turn it into a usable variable
 function userCityRequest(){
   let searchedCityArray = []
 
   searchedCityArray.push(savedCitySearches)
-  $('#cityForm').on('click', "#btnSearch", function (e){
-    const savedDataID = $(this).parent().attr('id')
-    const savedDataText = $(this).prev().val()
-    searchedCityArray.push(JSON.stringify(savedDataText))
-    citySearches.push(savedDataText)
-    localStorage.setItem(savedDataID, searchedCityArray)
+  $('#cityForm').on('click', "#btnSearch", function (e){//taget button and search
+    const savedDataID = $(this).parent().attr('id')//taget id to use as key
+    const savedDataText = $(this).prev().val()//taget text value to use for city
+    searchedCityArray.push(savedDataText)//push data to array to be stored and used
+    citySearches.push(savedDataText) // push data to be used for javascript
+    localStorage.setItem(savedDataID, searchedCityArray) // store user input into local storage
     e.preventDefault()
     //console.log(typeof savedDataID,typeof savedDataText)
     console.log(savedDataText)
@@ -32,9 +34,10 @@ function userCityRequest(){
   })
 }
 
+//function to change user input city into lat/lon for api
 function cityLatLon(){
-  for(i = 0; i<citySearches.length; i++)
-  cityName = JSON.stringify(citySearches[i])
+  for(i = 0; i<citySearches.length; i++) //goes through the array of the users input
+  cityName = JSON.stringify(citySearches[i]) // gets city name to put into url
   //console.log(typeof cityName)
   console.log(cityName)
   const geoCityCoder = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${apiKey}`
@@ -43,7 +46,7 @@ function cityLatLon(){
       //console.log(response)
       return response.json();
     })
-   .then(data =>{
+   .then(data =>{ //changes the collected data into lat/lon for the next url to use
       lat = data[0].lat;
       lon = data[0].lon;
       //console.log(lat, lon)
@@ -52,6 +55,7 @@ function cityLatLon(){
     })
 }
 
+//an api for today's weather
 function todaysWeather(){
  const weatherToday = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
 
@@ -66,21 +70,22 @@ function todaysWeather(){
   })
 }
 
+//A function to display today's weather data on the html page
 function displayToday(data){
   console.log(data)
   console.log(cityName)
   var city = cityName
-  let container = document.getElementById("todayCity");
+  let container = document.getElementById("todayCity"); //tagets the place where I want the data to appear
     while (container.firstChild) {
-    container.removeChild(container.firstChild);
+    container.removeChild(container.firstChild);//removes the previous data on the page from the last ciy
   }
-  let selectedItems = ["temp", "feels_like", "temp_min", "temp_max"];
+  let selectedItems = ["temp", "feels_like", "temp_min", "temp_max"];// tagets the desired data I want
   
-  let cityElement = document.createElement("div");
+  let cityElement = document.createElement("div");//creates divs for the data to appear
   cityElement.innerHTML = "City: " + city;
   container.appendChild(cityElement);
 
-  for (let key in data) {
+  for (let key in data) {// goes through a loop with the data using a key to target and create divs from the desired data
       if (selectedItems.includes(key)) {
           let item = data[key];
           let element = document.createElement("div");
@@ -91,14 +96,14 @@ function displayToday(data){
       }
   }
 
-  //create new button
+  //create new button for the city
   let addBtn = document.createElement("button");
   let addBtnText = document.createTextNode((city));
   addBtn.appendChild(addBtnText);
   document.getElementById("addBtn").appendChild(addBtn);
   addBtn.setAttribute("data-set", JSON.stringify(data));
 
-  //save button data to array
+  //save button data to array the array so there can be more than one
   buttonArray.push(addBtn);
   buttonCount++;
 
@@ -110,11 +115,12 @@ function displayToday(data){
   }
 }
 
+//this is for the five day weather forcast
 function weatherDataCollection(){
   const apiLink = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
   
   fetch(apiLink)
-    .then (response =>{
+    .then (response =>{//
       //console.log(response);
       return response.json();
     })
@@ -124,6 +130,7 @@ function weatherDataCollection(){
     })
 }
 
+//this was partial code from insturctor to break the data down and taget only the wanted data from an array of 40 objects
 function parseWeatherData(data){
   //console.log(data)
   data.forEach(obj => {
@@ -144,13 +151,14 @@ function parseWeatherData(data){
   addDataToPage(fiveDaysOfWeather)
 }
 
+//this function adds the five day weather forcast data to the webpage
 function addDataToPage(fiveDaysOfWeather, cityName){
   const ul = document.createElement("ul");
   const fiveDayAhead = document.getElementById('fiveDayAhead')
   ul.classList.add("data-list");
   console.log(fiveDaysOfWeather.length)
   console.log(fiveDaysOfWeather)
-  for (let i = 0; i < fiveDaysOfWeather.length; i++) {
+  for (let i = 0; i < fiveDaysOfWeather.length; i++) { //a loop to make an li for each piece of data
     const main = fiveDaysOfWeather[i].main;
     const li = document.createElement("li");
     li.classList.add("data-item", "col-2", "row");
