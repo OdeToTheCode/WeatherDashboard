@@ -1,6 +1,6 @@
 const apiKey = '3ac612bec38b9ebd74ccb9dcb78997e5'
 const mainContainer = document.getElementById('page')
-let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
+let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss")
 let newcurrDTValue = currDTValue.split(" ")[0]
 const fiveDaysOfWeather = []
 const citySearches = []
@@ -8,8 +8,8 @@ const savedCitySearches = localStorage.getItem('cityForm')
 let lat
 let lon
 let cityName = ""
-let buttonCount = 0;
-let buttonArray = [];
+let buttonCount = 0
+let buttonArray = []
 
 //console.log(citySearches)
 //console.log(savedCitySearches)
@@ -75,43 +75,43 @@ function displayToday(data){
   console.log(data)
   console.log(cityName)
   var city = cityName
-  let container = document.getElementById("todayCity"); //tagets the place where I want the data to appear
+  let container = document.getElementById("todayCity") //tagets the place where I want the data to appear
     while (container.firstChild) {
-    container.removeChild(container.firstChild);//removes the previous data on the page from the last ciy
+    container.removeChild(container.firstChild)//removes the previous data on the page from the last ciy
   }
-  let selectedItems = ["temp", "feels_like", "temp_min", "temp_max"];// tagets the desired data I want
+  let selectedItems = ["temp", "feels_like", "temp_min", "temp_max"]// tagets the desired data I want
   
-  let cityElement = document.createElement("div");//creates divs for the data to appear
-  cityElement.innerHTML = "City: " + city;
-  container.appendChild(cityElement);
+  let cityElement = document.createElement("div")//creates divs for the data to appear
+  cityElement.innerHTML = "City: " + city
+  container.appendChild(cityElement)
 
   for (let key in data) {// goes through a loop with the data using a key to target and create divs from the desired data
       if (selectedItems.includes(key)) {
-          let item = data[key];
-          let element = document.createElement("div");
-          let titleNode = document.createTextNode(city);
-          element.insertBefore(titleNode, element.firstChild);
-          element.innerHTML = key+":"+item;
-          container.appendChild(element);
+          let item = data[key]
+          let element = document.createElement("div")
+          let titleNode = document.createTextNode(city)
+          element.insertBefore(titleNode, element.firstChild)
+          element.innerHTML = key+":"+item
+          container.appendChild(element)
       }
   }
 
   //create new button for the city
-  let addBtn = document.createElement("button");
-  let addBtnText = document.createTextNode((city));
-  addBtn.appendChild(addBtnText);
-  document.getElementById("addBtn").appendChild(addBtn);
-  addBtn.setAttribute("data-set", JSON.stringify(data));
+  let addBtn = document.createElement("button")
+  let addBtnText = document.createTextNode((city))
+  addBtn.appendChild(addBtnText)
+  document.getElementById("addBtn").appendChild(addBtn)
+  addBtn.setAttribute("data-set", JSON.stringify(data))
 
   //save button data to array the array so there can be more than one
-  buttonArray.push(addBtn);
-  buttonCount++;
+  buttonArray.push(addBtn)
+  buttonCount++
 
   //remove oldest button if more than 5 buttons exist
   if (buttonCount > 5) {
-      let removeBtn = buttonArray.shift();
-      removeBtn.remove();
-      buttonCount--;
+      let removeBtn = buttonArray.shift()
+      removeBtn.remove()
+      buttonCount--
   }
 }
 
@@ -122,7 +122,7 @@ function weatherDataCollection(){
   fetch(apiLink)
     .then (response =>{//
       //console.log(response);
-      return response.json();
+      return response.json()
     })
     .then(data => {
       //console.log(data);
@@ -135,8 +135,8 @@ function parseWeatherData(data){
   //console.log(data)
   data.forEach(obj => {
     const dateObj = moment(obj.dt_txt)
-    const currday = dateObj._i; 
-    const newCurrDay = currday.split(" ")[0];
+    const currday = dateObj._i
+    const newCurrDay = currday.split(" ")[0]
     //console.log(dateObj)
     //console.log(currday.split(" "))
     //console.log(currDTValue)
@@ -153,26 +153,41 @@ function parseWeatherData(data){
 
 //this function adds the five day weather forcast data to the webpage
 function addDataToPage(fiveDaysOfWeather, cityName){
-  const ul = document.createElement("ul");
+  const ul = document.createElement("ul")
   const fiveDayAhead = document.getElementById('fiveDayAhead')
-  ul.classList.add("data-list");
+  ul.classList.add("data-list")
   console.log(fiveDaysOfWeather.length)
   console.log(fiveDaysOfWeather)
-  for (let i = 0; i < fiveDaysOfWeather.length; i++) { //a loop to make an li for each piece of data
-    const main = fiveDaysOfWeather[i].main;
-    const li = document.createElement("li");
-    li.classList.add("data-item", "col-2", "row");
-    li.innerHTML = `
-    <div class="5dayCity">City: ${cityName}</div>
-    <div class="temp">temp: ${main.temp}</div>
-    <div class="feels-like">feels like: ${main.feels_like}</div>
-    <div class="temp-min">temp min: ${main.temp_min}</div>
-    <div class="temp-max">temp max: ${main.temp_max}</div>
-    `;
-  ul.appendChild(li);
-}
-document.body.appendChild(ul);
-
+  for (let i = 0; i < 5; i++) {
+    const weather = fiveDaysOfWeather[i].main
+    const temp = weather.temp
+    const feelsLike = weather.feels_like
+    const tempMin = weather.temp_min
+    const tempMax = weather.temp_max
+  
+    const target = document.getElementById(`day-${i + 1}`)
+    // Find the previous unordered list inside the target element
+    const previousList = target.getElementsByTagName("ul")[0]
+    // Remove the previous unordered list from the target element
+    if (previousList) {
+      target.removeChild(previousList)
+    }
+    const list = document.createElement("ul")
+    const tempEl = document.createElement("li")
+    tempEl.innerText = `Temp: ${temp}`
+    const feelsLikeEl = document.createElement("li")
+    feelsLikeEl.innerText = `Feels like: ${feelsLike}`
+    const tempMinEl = document.createElement("li")
+    tempMinEl.innerText = `Min temp: ${tempMin}`
+    const tempMaxEl = document.createElement("li")
+    tempMaxEl.innerText = `Max temp: ${tempMax}`
+  
+    list.appendChild(tempEl)
+    list.appendChild(feelsLikeEl)
+    list.appendChild(tempMinEl)
+    list.appendChild(tempMaxEl)
+    target.appendChild(list)
+  }
 }
 
 userCityRequest()
