@@ -1,0 +1,62 @@
+/* Set the background color to a dark gray */
+body {
+  background-color: #2f2f2f;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Add a light gray background color to the header */
+header {
+  background-color: #4f4f4f;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  color: white;
+}
+
+/* Style the form and button in the search section */
+#cityForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#cityForm input[type="text"] {
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #2f2f2f;
+}
+
+#cityForm #btnSearch {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#cityForm #btnSearch:hover {
+  background-color: #45a049;
+}
+
+/* Style the container that holds the current weather information */
+#todayCity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  background-color: #4f4f4f;
+  padding: 20px;
+}
+
