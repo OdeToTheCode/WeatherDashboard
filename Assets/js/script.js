@@ -145,6 +145,7 @@ function parseWeatherData(data){
      if( newCurrDay !== newcurrDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt_txt.split(" ")[0] === obj.dt_txt.split(" ")[0] ) ){
         currDTValue = newCurrDay
         fiveDaysOfWeather.push(obj)
+        console.log(obj)
     }
   })
   console.log(typeof data[0])
@@ -153,12 +154,14 @@ function parseWeatherData(data){
 
 //this function adds the five day weather forcast data to the webpage
 function addDataToPage(fiveDaysOfWeather, cityName){
+  console.log(fiveDaysOfWeather)
   const ul = document.createElement("ul")
   const fiveDayAhead = document.getElementById('fiveDayAhead')
   ul.classList.add("data-list")
   console.log(fiveDaysOfWeather.length)
   console.log(fiveDaysOfWeather)
   for (let i = 0; i < 5; i++) {
+    const weatherTime = fiveDaysOfWeather[i]
     const weather = fiveDaysOfWeather[i].main
     const temp = weather.temp
     const feelsLike = weather.feels_like
@@ -167,11 +170,6 @@ function addDataToPage(fiveDaysOfWeather, cityName){
   
     const target = document.getElementById(`day-${i + 1}`)
     // Find the previous unordered list inside the target element
-    const previousList = target.getElementsByTagName("ul")[0]
-    // Remove the previous unordered list from the target element
-    if (previousList) {
-      target.removeChild(previousList)
-    }
     const list = document.createElement("ul")
     const tempEl = document.createElement("li")
     tempEl.innerText = `Temp: ${temp}`
