@@ -40,7 +40,7 @@ function cityLatLon(){
   cityName = JSON.stringify(citySearches[i]) // gets city name to put into url
   //console.log(typeof cityName)
   console.log(cityName)
-  const geoCityCoder = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${apiKey}`
+  const geoCityCoder = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${apiKey}`
   fetch(geoCityCoder)
     .then(response =>{
       //console.log(response)
